@@ -36,6 +36,18 @@ Streamlit UI (:8503) → Research Pipeline → Perplexity API
 | `research_history` | Search history by project |
 | `research_stats` | Storage statistics |
 
+## Research Workflow (ВАЖНО!)
+
+**Принятый подход** (token-efficient):
+1. **Пользователь** ищет информацию через **Perplexity Pro** (Deep Research)
+2. **Пользователь** курирует и добавляет найденное в **NotebookLM** notebook
+3. **Пользователь** даёт Claude ссылку на notebook + задачу
+4. **Claude** регистрирует notebook (`add_notebook`) если новый
+5. **Claude** запрашивает контекст у NotebookLM (`ask_question`) и выполняет задачу
+
+**Почему так**: Claude НЕ тратит токены на поиск. NotebookLM отдаёт точечные, курированные ответы.
+Auto-context skill автоматически подтягивает контекст из зарегистрированных notebooks по topics задачи.
+
 ## Running
 
 ```bash
