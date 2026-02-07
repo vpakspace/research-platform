@@ -84,8 +84,15 @@ class ResearchStorage:
         if project_id:
             payload["project_id"] = project_id
 
+        import uuid as _uuid
+
+        try:
+            point_id = str(_uuid.UUID(result.id))
+        except ValueError:
+            point_id = str(_uuid.uuid5(_uuid.NAMESPACE_DNS, result.id))
+
         point = PointStruct(
-            id=result.id,
+            id=point_id,
             vector=vector,
             payload=payload,
         )
@@ -110,11 +117,12 @@ class ResearchStorage:
         self.ensure_collection()
 
         vector = self._embed(query)
-        hits = self._qdrant.search(
+        response = self._qdrant.query_points(
             collection_name=self.collection_name,
-            query_vector=vector,
+            query=vector,
             limit=limit,
         )
+        hits = response.points
 
         results = []
         for hit in hits:
@@ -178,7 +186,7 @@ class ResearchStorage:
             return {
                 "collection": self.collection_name,
                 "points_count": info.points_count,
-                "vectors_count": info.vectors_count,
+                "indexed_vectors_count": getattr(info, "indexed_vectors_count", 0),
                 "status": str(info.status),
             }
         except Exception:

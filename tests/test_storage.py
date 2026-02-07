@@ -140,7 +140,9 @@ class TestSearchSimilar:
         mock_collections = MagicMock()
         mock_collections.collections = [mock_coll]
         mock_qdrant.get_collections.return_value = mock_collections
-        mock_qdrant.search.return_value = [mock_hit]
+        mock_query_response = MagicMock()
+        mock_query_response.points = [mock_hit]
+        mock_qdrant.query_points.return_value = mock_query_response
         mock_qdrant_cls.return_value = mock_qdrant
 
         s = ResearchStorage(openai_api_key="sk-test")
@@ -166,7 +168,9 @@ class TestSearchSimilar:
         mock_collections = MagicMock()
         mock_collections.collections = [mock_coll]
         mock_qdrant.get_collections.return_value = mock_collections
-        mock_qdrant.search.return_value = []
+        mock_query_response = MagicMock()
+        mock_query_response.points = []
+        mock_qdrant.query_points.return_value = mock_query_response
         mock_qdrant_cls.return_value = mock_qdrant
 
         s = ResearchStorage(openai_api_key="sk-test")
@@ -182,7 +186,7 @@ class TestGetStats:
         mock_qdrant = MagicMock()
         mock_info = MagicMock()
         mock_info.points_count = 42
-        mock_info.vectors_count = 42
+        mock_info.indexed_vectors_count = 42
         mock_info.status = "green"
         mock_qdrant.get_collection.return_value = mock_info
         mock_qdrant_cls.return_value = mock_qdrant
