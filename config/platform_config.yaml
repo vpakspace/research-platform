@@ -1,0 +1,22 @@
+# Research Intelligence Platform Configuration
+
+perplexity:
+  default_model: "sonar-pro"
+  timeout: 60
+  min_request_interval: 1.0
+
+qdrant:
+  url: "http://localhost:6333"
+  collection_name: "research_results"
+  vector_size: 1536
+
+embeddings:
+  model: "text-embedding-3-small"
+  dimensions: 1536
+
+ui:
+  port: 8503
+  title: "Research Intelligence Platform"
+
+logging:
+  level: "INFO"
